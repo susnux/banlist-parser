@@ -20,6 +20,5 @@ Save crontab, finished.
 
 # Dependencies
 1. python 3.0 or higher
-2. python3-dateutil
-3. python3-beautifulsoup4
-4. python-urllib3
+2. python3-beautifulsoup4
+3. python-urllib3

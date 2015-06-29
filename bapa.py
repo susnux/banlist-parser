@@ -1,4 +1,4 @@
-#/usr/bin/env python3
+#!/usr/bin/env python3
 
 # Copyright (c) 2015, Ferdinand Thiessen (susnux) <rpm@fthiessen.de>
 # Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted,
@@ -11,8 +11,8 @@
 # NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 import urllib.request
-import re, errno, sys, datetime
-import dateutil.parser
+import re, errno, sys
+from datetime import datetime
 from bs4 import BeautifulSoup
 
 #URL and settings
@@ -57,19 +57,19 @@ def processBans(con):
 		del match
 		match = re.search(r"Permanent" , line.group(0))
 		if match:
-			date = datetime.datetime(2114, 3, 20, 11, 13, 37)
+			date = datetime(2114, 3, 20, 11, 13, 37)
 		else:
 			match = re.search(r"(?<=>)([0-9]{4}-[0-9]{2}-[0-9]{2}?)(?=<\/td>)", line.group(0))
-			date = dateutil.parser.parse(match.group(0))
+			date = datetime.strptime(match.group(0), "%Y-%m-%d")
 		global bans
 		bans.append((player, date.strftime("%m/%d/%Y %I:%M:%S %p")))
 
 #get bans
 for page in range(1, pages + 1):
-	h = urllib.request.urlopen(list_url + str(x))
+	h = urllib.request.urlopen(list_url + str(page))
 	processBans(h.read().decode('iso-8859-1'))
 	h.close()
-	print("\rProgress:   %.2f%%" % ((x+1) * 100/(pages+1)),end="",flush=True)
+	print("\rProgress:   %.2f%%" % ((page+1) * 100/(pages+1)),end="",flush=True)
 
 #write xml
 print("\nWrite to disk")
